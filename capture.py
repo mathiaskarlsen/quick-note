@@ -13,10 +13,10 @@ from PySide6.QtWidgets import QApplication, QDialog, QFrame, QVBoxLayout, QPlain
 from PySide6.QtCore import Qt, QEvent
 from PySide6.QtGui import QCursor
 
-CONFIG = Path(os.environ.get('XDG_CONFIG_HOME') or Path.home()/'.config') / 'zettel-inbox-capture/settings.json'
-STATE = Path(os.environ.get('XDG_STATE_HOME') or Path.home()/'.local/state') / 'zettel-inbox-capture'
+CONFIG = Path(os.environ.get('XDG_CONFIG_HOME') or Path.home()/'.config') / 'quick-note/settings.json'
+STATE = Path(os.environ.get('XDG_STATE_HOME') or Path.home()/'.local/state') / 'quick-note'
 DRAFT = STATE/'draft.txt'
-TEMP_PREFIX = '.zettel-inbox-capture-'
+TEMP_PREFIX = '.quick-note-'
 TEMP_SUFFIX = '.tmp'
 
 
@@ -78,7 +78,7 @@ def capture_screen(app):
     return app.screenAt(QCursor.pos()) or app.primaryScreen()
 
 def notify_sync(message):
-    subprocess.run(['notify-send', 'Zettelkasten sync', message], check=False)
+    subprocess.run(['notify-send', 'Quick Note sync', message], check=False)
 
 
 def git(vault, *args, allowed=(0,)):
@@ -184,7 +184,7 @@ class Capture(QDialog):
         return super().event(event)
 
     def setup_ui(self):
-        self.setWindowTitle('Zettelkasten Inbox Quick Capture')
+        self.setWindowTitle('Quick Note')
         self.setAttribute(Qt.WA_TranslucentBackground)
         outer = QVBoxLayout(self)
         outer.setContentsMargins(0, 0, 0, 0)

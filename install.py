@@ -1,11 +1,11 @@
 #!/usr/bin/python3
-"""Install Inbox Quick Capture for the current user (KDE Plasma 6; no sudo).
+"""Install Quick Note for the current user (KDE Plasma 6; no sudo).
 
 What installation changes:
   - Creates the chosen Inbox directory if missing. Saves the vault path, Inbox
-    path and Git sync preference in zettel-inbox-capture/settings.json under
+    path and Git sync preference in quick-note/settings.json under
     the XDG config directory. Installation itself never commits or pushes notes.
-  - Copies capture.py to ~/.local/bin/zettel-inbox-capture and records its hash
+  - Copies capture.py to ~/.local/bin/quick-note and records its hash
     beside settings.json so later installs can recognize the executable.
   - Writes a launcher under the XDG data directory's kglobalaccel/ and links
     it into applications/. The launcher disables the startup animation.
@@ -31,7 +31,7 @@ import sys
 import tempfile
 
 HOME = Path.home()
-NAME = 'zettel-inbox-capture'
+NAME = 'quick-note'
 ID = NAME + '.desktop'
 RULE = '640e524f-a5e5-4275-90f3-163f673a426c'
 DATA = Path(os.environ.get('XDG_DATA_HOME') or HOME/'.local/share')
@@ -40,13 +40,13 @@ BIN = HOME/'.local/bin'/NAME
 DESKTOP = DATA/'kglobalaccel'/ID
 LINK = DATA/'applications'/ID
 BUS = ['busctl', '--user', 'call', 'org.kde.kglobalaccel', '/kglobalaccel', 'org.kde.KGlobalAccel']
-ACTION = ['4', ID, '_launch', 'Inbox Quick Capture', 'Launch']
+ACTION = ['4', ID, '_launch', 'Quick Note', 'Launch']
 
 def call(*args):
     return subprocess.check_output(args, text=True).strip()
 
-KEYS = dict(Description='Hide Inbox Quick Capture from taskbar', wmclassmatch='0',
-            title='Zettelkasten Inbox Quick Capture', titlematch='1', skiptaskbar='true', skiptaskbarrule='2')
+KEYS = dict(Description='Hide Quick Note from taskbar', wmclassmatch='0',
+            title='Quick Note', titlematch='1', skiptaskbar='true', skiptaskbarrule='2')
 KWIN = CONFIG.parent.parent/'kwinrulesrc'
 RECEIPT = CONFIG.with_name('installed.sha256')
 # The capture.py shipped by the original installer (also used by the local legacy setup).
@@ -112,7 +112,7 @@ def write(path, value):
 
 def desktop(key, executable=None):
     executable = executable if executable is not None else f'"{BIN}"'
-    return (f'[Desktop Entry]\nType=Application\nName=Inbox Quick Capture\nExec={executable}\n'
+    return (f'[Desktop Entry]\nType=Application\nName=Quick Note\nExec={executable}\n'
             'Icon=document-new\nStartupNotify=false\nX-KDE-StartupNotify=false\n'
             f'X-KDE-Shortcuts={key}\n').encode()
 
@@ -308,7 +308,7 @@ def setup_inputs(parser, defaults, previous_key, shortcut):
         owner = call(*BUS, 'getGlobalShortcutsByKey', 'i', code)
         fields = shlex.split(owner)
         if fields[1:] == ['0'] or (previous_key and fields[1:8] == [
-                '1', '_launch', 'Launch', ID, 'Inbox Quick Capture', 'default', 'Default Context']):
+                '1', '_launch', 'Launch', ID, 'Quick Note', 'default', 'Default Context']):
             return dict(vault=str(vault), inbox=str(inbox), sync=sync), seq.toString(), code
         print('Already assigned; choose another shortcut.')
 
