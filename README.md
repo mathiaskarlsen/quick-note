@@ -1,4 +1,4 @@
-Opens a small textbox to quickly write notes
+Opens a small textbox to quickly write fleeting notes for your zettelkasten
 
 installable on KDE Plasma 6
 
